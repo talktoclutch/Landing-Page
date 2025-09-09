@@ -3,93 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clutch Landing Page</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Talk to Your Car!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
   <style>
-    @font-face {
-      font-family: "Euclid Circular A";
-      src: url("EuclidCircularA-Regular.woff2") format("woff2"),
-           url("EuclidCircularA-Regular.woff") format("woff");
-      font-weight: normal;
-      font-style: normal;
-    }
-
     body {
       margin: 0;
       font-family: "Inter", sans-serif;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #6a1b9a, #9c27b0);
-      color: white;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      width: 85%;                 /* slightly narrower than before */
-      max-width: 1000px;          /* reduced by ~10% */
-      min-height: 88vh;           /* slightly shorter for balance */
-      padding: 50px;              /* adjusted padding */
-      border-radius: 22px;
-      background-color: rgba(106, 27, 154, 0.85);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
-    }
-
-    img.logo {
-      width: 150px;              /* slightly smaller */
-      margin-bottom: 35px;
-    }
-
-    h1.car-text {
-      font-size: 180px;          /* reduced slightly to match new width */
-      font-weight: 700;
-      margin: 35px 0;
-      line-height: 1;
+      min-height: 100vh;
+      background-color: #6a1b9a; /* Background color */
+      color: white;
       text-align: center;
     }
-
-    .qr-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 50px;
-    }
-
-    .qr {
-      width: 160px;              /* slightly smaller */
-      transition: transform 0.3s ease;
-      margin-bottom: 18px;
-    }
-
-    .qr:hover {
-      transform: scale(1.08);
-    }
-
-    p.sub-text {
-      font-family: "Euclid Circular A", sans-serif;
-      font-size: 44px;           /* reduced slightly */
+    h1 {
+      font-size: 48px; /* Adjust font size */
       margin: 0;
-      text-align: center;
-      max-width: 720px;          /* reduced for balance */
+      font-weight: 700; /* Bold font */
+    }
+    .container {
+      background-color: #9c27b0; /* Container background */
+      padding: 40px 20px;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+      width: 90%;
+      max-width: 500px;
+    }
+    img.logo {
+      width: 100%;
+      max-width: 160px;
+      margin-bottom: 20px;
+    }
+    .input-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    input[type="email"] {
+      padding: 10px;
+      border: none;
+      border-radius: 4px 0 0 4px; /* Rounded corners on the left */
+      width: 80%;
+      max-width: 250px; /* Limit width */
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 0 4px 4px 0; /* Rounded corners on the right */
+      background-color: black; /* Button color */
+      color: white; /* Button text color */
+      cursor: pointer;
+      font-weight: 700; /* Bold button text */
+      margin-left: 5px; /* Space between input and button */
+    }
+    button:hover {
+      background-color: #333; /* Darker button color on hover */
+    }
+    .links {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 20px;
+    }
+    a {
+      color: white;
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Logo -->
     <img class="logo" src="clutch_logo.svg" alt="Clutch Logo" />
+    <h1>TALK TO YOUR CAR!</h1>
+    <p>Join the waitlist to meet ClutchBot</p>
+    
+    <div class="input-container">
+      <input type="email" placeholder="Enter your email" />
+      <button>Get Early Access</button>
+    </div>
 
-    <!-- Big headline -->
-    <h1 class="car-text">TALK TO YOUR CAR!</h1>
-
-    <!-- QR + subtext -->
-    <div class="qr-section">
-      <img class="qr" src="qr_code.png" alt="QR Code" />
-      <p class="sub-text">Scan the code. Meet the ClutchBot</p>
+    <div class="links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
     </div>
   </div>
 </body>
