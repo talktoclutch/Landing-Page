@@ -3,22 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="facebook-domain-verification" content="l61i4xgwynkv15jkdrhmf9mloq14x5" />
+  <meta name="facebook-domain-verification" content="l61i4xgwynkv15jkdrhmf9mloq14x5" />
   <title>Talk to Your Car!</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-32x32.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;900&family=Barlow+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    
-    @font-face {
-      font-family: 'EuclidCircularA';
-      src: url('Euclid Circular A Medium.ttf') format('truetype');
-      font-weight: 500;
-      font-style: normal;
-    }
-    
     * {
       margin: 0;
       padding: 0;
@@ -29,7 +18,6 @@
       font-family: "Inter", sans-serif;
       min-height: 100vh;
       background: #8001CC;
-      /* background: linear-gradient(135deg, #8e24aa 0%, #7b1fa2 100%); */
       color: white;
       text-align: center;
       position: relative;
@@ -44,7 +32,7 @@
       font-size: 48px;
       font-weight: 900;
       font-style: italic;
-      margin-bottom: 140px;
+      margin-bottom: 100px;
       letter-spacing: -1px;
     }
     
@@ -59,7 +47,6 @@
     }
     
     .subheading {
-      /* font-family: 'Barlow Condensed', sans-serif; */
       font-size: 32px;
       font-weight: 400;
       margin-bottom: 40px;
@@ -105,6 +92,54 @@
     
     button:hover {
       background-color: #333;
+    }
+    
+    button:disabled {
+      background-color: #666;
+      cursor: not-allowed;
+    }
+    
+    #waitlist-message {
+  position: fixed;
+  left: 50%;
+  top: 40px;
+  transform: translateX(-50%) scale(1);
+      min-width: 280px;
+      max-width: 90vw;
+      padding: 18px 32px;
+      font-size: 18px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      background: rgba(30, 30, 30, 0.95);
+      color: #fff;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: opacity 0.4s, transform 0.4s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #waitlist-message.toast-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) scale(1.05);
+    }
+    #waitlist-message.success {
+  background: #fff;
+  color: #111;
+    }
+    #waitlist-message.error {
+  background: #fff;
+  color: #111;
+    }
+    
+    .success {
+      color: #1ff16c;
+    }
+    
+    .error {
+      color: #f87171;
     }
     
     .footer-links {
@@ -162,7 +197,7 @@
   </style>
 </head>
 <body>
-  <img class="logo" src="clutch_logo.svg" alt="Clutch Logo" />
+    <img class="logo" src="clutch_logo.svg" alt="Clutch Logo" />
   
   <h1 class="main-heading">TALK TO<br>YOUR CAR!</h1>
   
@@ -172,10 +207,125 @@
     <input type="email" placeholder="Enter your email" />
     <button>Get Early Access</button>
   </div>
+  <div id="waitlist-message"></div>
 
   <div class="footer-links">
     <a href="terms.html">Terms of Service</a>
     <a href="privacy.html">Privacy Policy</a>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBJtklMwlmjhPRxFCejR04Q3CvUUkjApGE",
+      authDomain: "email-waitlist-823e1.firebaseapp.com",
+      projectId: "email-waitlist-823e1",
+      storageBucket: "email-waitlist-823e1.firebasestorage.app",
+      messagingSenderId: "1048311264304",
+      appId: "1:1048311264304:web:ffe8ba7c7b729a07a2e9f5",
+      measurementId: "G-VNS09857Q8"
+    };
+
+    // Initialize Firebase
+    let app, db;
+    try {
+      app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      console.log('Firebase initialized successfully');
+    } catch (error) {
+      console.error('Firebase initialization error:', error);
+    }
+
+    // Email validation function
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    // Add event listener for waitlist button
+    document.addEventListener('DOMContentLoaded', () => {
+      const emailInput = document.querySelector('.input-container input[type="email"]');
+      const button = document.querySelector('.input-container button');
+      const messageDiv = document.getElementById('waitlist-message');
+
+      // Toast helper
+      function showToast(message, type = '') {
+        messageDiv.textContent = message;
+        messageDiv.className = `${type} toast-visible`;
+        setTimeout(() => {
+          messageDiv.className = type;
+        }, 3500);
+      }
+
+      button.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const email = emailInput.value.trim();
+
+        // Hide previous toast
+        messageDiv.className = '';
+        messageDiv.textContent = '';
+
+        // Validate email
+        if (!email) {
+          showToast('Please enter an email address.', 'error');
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          showToast('Please enter a valid email address.', 'error');
+          return;
+        }
+
+        // Disable button during submission
+        button.disabled = true;
+        button.textContent = 'Adding...';
+
+        try {
+          console.log('Attempting to add email to waitlist:', email);
+
+          await addDoc(collection(db, 'waitlist'), {
+            email: email,
+            timestamp: new Date(),
+          });
+
+          console.log('Email successfully added to waitlist');
+          showToast('Yay! You have been added to the waitlist.☺️', 'success');
+          emailInput.value = '';
+
+        } catch (error) {
+          console.error('Detailed error adding email to waitlist:', error);
+          console.error('Error code:', error.code);
+          console.error('Error message:', error.message);
+
+          let errorMessage = 'Error saving your email. Please try again. 😣';
+
+          // Provide more specific error messages
+          if (error.code === 'permission-denied') {
+            errorMessage = 'Permission denied. Please check Firestore security rules.';
+          } else if (error.code === 'unavailable') {
+            errorMessage = 'Service temporarily unavailable. Please try again later.';
+          } else if (error.message) {
+            errorMessage = `Error: ${error.message}`;
+          }
+
+          showToast(errorMessage, 'error');
+        } finally {
+          // Re-enable button
+          button.disabled = false;
+          button.textContent = 'Get Early Access';
+        }
+      });
+      
+      // Allow form submission with Enter key
+      emailInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          button.click();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
