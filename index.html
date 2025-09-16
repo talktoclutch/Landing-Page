@@ -8,6 +8,12 @@
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;900&family=Barlow+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
+    @font-face {
+      font-family: 'MONOSPACE821BT';
+      src: url('MONOSPACE821BT.TTF') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
     * {
       margin: 0;
       padding: 0;
@@ -47,8 +53,8 @@
     }
     
     .subheading {
-      font-size: 32px;
-      font-weight: 400;
+      font-size: 28px;
+      font-weight: 500;
       margin-bottom: 40px;
       opacity: 0.95;
     }
@@ -153,15 +159,27 @@
     }
     
     .footer-links a {
-      color: white;
-      text-decoration: none;
-      font-size: 16px;
-      opacity: 0.8;
-      transition: opacity 0.2s;
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  font-family: 'MONOSPACE821BT', monospace;
     }
     
     .footer-links a:hover {
       opacity: 1;
+    }
+
+    .footer-mono {
+  font-family: 'MONOSPACE821BT', monospace;
+  opacity: 0.8;
+  font-size: 14px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 16px;
+  align-self: center;
     }
     
     @media (max-width: 768px) {
@@ -191,7 +209,17 @@
         flex-direction: column;
         gap: 12px;
         text-align: center;
+        align-items: center;
         padding: 0 20px;
+      }
+      .footer-links .footer-mono {
+        position: static;
+        left: auto;
+        transform: none;
+        bottom: auto;
+        order: 3;
+        margin-top: 8px;
+        align-self: center;
       }
     }
   </style>
@@ -210,8 +238,9 @@
   <div id="waitlist-message"></div>
 
   <div class="footer-links">
-    <a href="terms.html">Terms of Service</a>
-    <a href="privacy.html">Privacy Policy</a>
+  <a href="terms.html">Terms of Service</a>
+  <span class="footer-mono">Clutch Technologies Ltd. Registered in Nigeria under CAC BN 8803251</span>
+  <a href="privacy.html">Privacy Policy</a>
   </div>
 
   <script type="module">
